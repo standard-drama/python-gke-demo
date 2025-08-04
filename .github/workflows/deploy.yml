@@ -1,0 +1,41 @@
+name: Deploy to GKE
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: 'projects/649260330076/locations/global/workloadIdentityPools/github-pool/providers/github'
+          service_account: 'github-cicd@sonorous-earth-467917-n1.iam.gserviceaccount.com'
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          docker build -t europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} .
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }}
