@@ -30,4 +30,12 @@ jobs:
 
       - name: Configure Docker for Artifact Registry
         run: |
-          gcloud --quiet auth configure-docker europe-west1-docker.pkg.dev
+          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          docker build -t europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} .
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }}
