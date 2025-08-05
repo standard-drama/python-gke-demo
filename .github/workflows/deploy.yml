@@ -45,6 +45,9 @@ jobs:
         with:
           cluster_name: 'python-gke-demo'           # (Use your real GKE cluster name)
           location: 'europe-central2-a'               # (Or your actual cluster region)
+      - name: Apply k8s manifests
+        run: |
+           kubectl apply -f k8s/deployment.yaml
 
       - name: Deploy to GKE
         run: |
