@@ -18,15 +18,10 @@ spec:
           image: europe-central2-docker.pkg.dev/sonorous-earth-467917-n1/python-gke-demo/python-app:latest
           ports:
             - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: python-app-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: python-app
-  ports:
-    - port: 80
-      targetPort: 8080
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
