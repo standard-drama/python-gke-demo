@@ -30,11 +30,11 @@ jobs:
 
       - name: Configure Docker for Artifact Registry
         run: |
-          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
+          gcloud --quiet auth configure-docker europe-central2-a-docker.pkg.dev
 
       - name: Build Docker image
         run: |
-          docker build -t europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} .
+          docker build -t europe-central2-a-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} .
 
       - name: Push Docker image to Artifact Registry
         run: |
@@ -44,9 +44,9 @@ jobs:
         uses: google-github-actions/get-gke-credentials@v2
         with:
           cluster_name: 'python-gke-demo'           # (Use your real GKE cluster name)
-          location: 'europe-central2'               # (Or your actual cluster region)
+          location: 'europe-central2-a'               # (Or your actual cluster region)
 
       - name: Deploy to GKE
         run: |
-          kubectl set image deployment/python-app python-app=europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} --namespace=default
+          kubectl set image deployment/python-app python-app=europe-central2-a-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} --namespace=default
           kubectl rollout status deployment/python-app --namespace=default
