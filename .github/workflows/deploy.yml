@@ -38,7 +38,7 @@ jobs:
 
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }}
+          docker push europe-central2-a-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }}
           
       - name: Set up kubectl
         uses: google-github-actions/get-gke-credentials@v2
