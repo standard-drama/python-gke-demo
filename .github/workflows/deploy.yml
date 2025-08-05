@@ -30,15 +30,15 @@ jobs:
 
       - name: Configure Docker for Artifact Registry
         run: |
-          gcloud --quiet auth configure-docker europe-central2-a-docker.pkg.dev
+          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
 
       - name: Build Docker image
         run: |
-          docker build -t europe-central2-a-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} .
+          docker build -t europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} .
 
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push europe-central2-a-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }}
+          docker push europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }}
           
       - name: Set up kubectl
         uses: google-github-actions/get-gke-credentials@v2
@@ -48,5 +48,5 @@ jobs:
 
       - name: Deploy to GKE
         run: |
-          kubectl set image deployment/python-app python-app=europe-central2-a-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} --namespace=default
+          kubectl set image deployment/python-app python-app=europe-central2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/python-gke-demo/python-app:${{ github.sha }} --namespace=default
           kubectl rollout status deployment/python-app --namespace=default
